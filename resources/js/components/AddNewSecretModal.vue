@@ -17,6 +17,8 @@
             <b-form-group
                 label="Expires at (minutes)">
                 <b-form-input 
+                    type="number"
+                    min=0
                     v-model="secret.expiresAt">
                 </b-form-input>
             </b-form-group>
@@ -24,6 +26,8 @@
             <b-form-group
                 label="Expire after views">
                 <b-form-input 
+                    type="number"
+                    min=1
                     v-model="secret.remainingViews">
                 </b-form-input>
             </b-form-group>
@@ -31,6 +35,14 @@
             <template #modal-footer>
                 <b-button
                     variant="primary"
+                    size="sm"
+                    class="float-right"
+                    @click="closeModal"
+                >
+                    Close
+                </b-button>
+                <b-button
+                    variant="success"
                     size="sm"
                     class="float-right"
                     @click="saveSecret"
@@ -52,7 +64,7 @@ export default {
             secret: {
                 secretText: "",
                 expiresAt: "",
-                remainingViews: 0,
+                remainingViews: "",
             },
         }
     },
@@ -71,10 +83,18 @@ export default {
             axios.post('/api/secret/save', {
                 secretData: this.secret,
             })
-            .then(function (response) {
-                this.openNewSecretModal = false;
+            .then(response => {
+                this.closeModal();
             })
-        }
+        },
+        setSecretToDefault() {
+            this.secret = {};
+        },
+        closeModal() {
+            this.setSecretToDefault();
+            this.$emit('close-secret-modal');
+        },
+
     }
 }
 </script>

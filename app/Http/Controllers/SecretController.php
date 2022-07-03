@@ -50,7 +50,7 @@ class SecretController extends Controller
         $secret = new SecretDTO();
         $secret->hash = str_replace('/', '', Hash::make($secretText));
         $secret->secretText = $secretText;
-        $secret->expiresAt = $request->secretData['expiresAt'] !== 0 ? Carbon::now()->addMinutes(60) : 0;
+        $secret->expiresAt = $request->secretData['expiresAt'] !== "0" ? Carbon::now()->addMinutes(60) : 0;
         $secret->remainingViews = $request->secretData['remainingViews'];
 
         $this->secretService->save($secret);

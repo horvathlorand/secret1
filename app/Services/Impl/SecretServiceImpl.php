@@ -5,6 +5,7 @@ namespace App\Services\Impl;
 use App\DTO\SecretDTO;
 use App\Models\Secret;
 use App\Services\SecretService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 
@@ -20,9 +21,14 @@ use Illuminate\Http\JsonResponse;
      * @return Secret The Secret model.
      */
     public function getSecretByHash($hash): JsonResponse {
+      $actualTime = Carbon::now()->toDateTimeString();
       $secret = Secret::whereHash($hash)
-        ->where('remainingViews', '>', 0)
-        ->first();
+        ->where(function($query) use ($actualTime) {
+          $query->orWhere('expiresAt', '>', $actualTime)
+            ->orWhere('expiresAt', '=', 0) ;
+          })
+          ->where('remainingViews', '>', 0)
+          ->first();
       
       if ($secret) {
         $secret->decrement('remainingViews');

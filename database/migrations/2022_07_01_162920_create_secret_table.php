@@ -17,7 +17,7 @@ class CreateSecretTable extends Migration
             $table->id();
             $table->string('hash')->unique();
             $table->string('secretText');
-            $table->timestamp('expiresAt')->nullable();
+            $table->string('expiresAt');
             $table->integer('remainingViews');
             $table->timestamps();
         });

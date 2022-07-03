@@ -4,37 +4,35 @@
 
     <add-new-secret-modal
       :open-new-secret-modal="openNewSecretModal"
+      v-on:close-secret-modal="closeSecretModal"
     ></add-new-secret-modal>
 
-    <b-alert 
-      class="alert alert-danger" 
-      role="alert" 
-      :show="dismissCountDown" 
-      @dismissed="dismissCountDown=0" 
-      dismissible>
-      {{ errorText }}
-    </b-alert>
-    
-    <b-form-input 
-      v-model="secretHash">
-    </b-form-input>
-    
-    <b-button
-      @click="getSecretByHash">
-      Get secret
-    </b-button>
-    
-    <div class="pt-4">
-      <button 
-        type="button" 
-        class="btn btn-success" 
-        @click="openNewSecretModal = true">
-          Új secret hozzáadása
-      </button>
+    <div class="col-12">
+      <b-alert 
+        class="col-5 offset-3 alert alert-danger" 
+        role="alert" 
+        :show="dismissCountDown" 
+        @dismissed="dismissCountDown=0" 
+        dismissible>
+        {{ errorText }}
+      </b-alert>
     </div>
-    
-    <div>
-      <span v-if="Object.keys(secret).length !== 0">
+
+    <div class="row col-12">
+      <b-form-input 
+        class="col-3 offset-3"
+        v-model="secretHash">
+      </b-form-input>
+      
+      <b-button
+        class="col-1 offset-1"
+        @click="getSecretByHash">
+        Get secret
+      </b-button>
+    </div>
+
+    <div class="col-9 offset-3" v-if="Object.keys(secret).length !== 0">
+      <span>
         <label>
           Secret text: {{ secret.secretText }}
         </label>
@@ -45,6 +43,15 @@
           Remaining views: {{ secret.remainingViews }}
         </label>
       </span>
+    </div>
+    
+    <div class="pt-4">
+      <button 
+        type="button" 
+        class="btn btn-success col-2 offset-5" 
+        @click="openNewSecretModal = true">
+          Add new secret
+      </button>
     </div>
   </div>
 </template>
@@ -83,7 +90,10 @@ export default {
           }
         });
       }
-    }
+    },
+    closeSecretModal() {
+      this.openNewSecretModal = false;
+    },
   },
 }
 </script>
